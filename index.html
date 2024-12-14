@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Browser</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+	<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: Inter, Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #111;
+			color: white;
+        }
+        #file-browser, #not-hidden {
+            margin: 20px auto;
+            max-width: 800px;
+            background: #222;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+        .file-item {
+            display: flex;
+            align-items: center;
+            padding: 5px 10px;
+			background: #ff6666;
+			cursor: pointer;
+            border-bottom: 1px solid #ddd;
+        }
+        .file-item:last-child {
+            border-bottom: none;
+        }
+        .file-item i {
+            margin-right: 5px;
+        }
+        .file-item span {
+            flex-grow: 1;
+        }
+        .folder {
+            cursor: pointer;
+			background: #ff8888;
+        }
+        .children {
+            margin-left: 20px;
+            display: none;
+        }
+		#hidden {
+			display: none;
+		}
+		h2 {
+			margin: 1px 0;
+			margin-bottom: 8px;
+		}
+		textarea {
+			width: 100%;
+			height: 70vh;
+			font-family: "JetBrains Mono";
+			background: #333;
+			padding: 3px;
+			resize: none;
+			scrollbar-width: thin;
+			scrollbar-color: black #111;
+			border: 1px solid #ffffff2a;
+			border-radius: 8px;
+			color: white;
+		}
+		.abc {
+			background: #8888ff;
+			cursor: pointer;
+		}
+    </style>
+</head>
+<body>
+    <div id="file-browser">
+        <h2>1.21 SRC by gavin</h2>
+        <div id="file-structure">
+			<div class="file-item abc">
+				<i class="fas fa-arrow-left"></i>
+				<b>.. (back one)</b>
+			</div>
+		</div>
+    </div>
+	
+	<div id="hidden">
+		<b>content</b> <br/>
+		<textarea id="ctc"></textarea>
+	</div>
+
+    <script>
+		const fileStructure = { data: [] }; // Placeholder for loaded JSON
+		const params = new URLSearchParams(window.location.search);
+		let PATH = params.get('path') || "NONE";
+		console.log(PATH);
+		
+		document.querySelector(".abc").addEventListener('click',(e)=>{
+			window.location.href = window.location.href.replace(/\/[^/]*$/, "");
+		});
+		
+		console.log(PATH.includes('.'));
+		if(PATH.includes('.')) {
+			console.log('p');
+			document.getElementById('hidden').id = "not-hidden";
+			fetch(PATH).then(x => x.text()).then(y => {
+				console.log(y);
+				document.querySelector('textarea').value = y;
+			});
+		}
+
+		// Create a file or folder item element
+		function createFileItem(item) {
+			const container = document.createElement('div');
+			container.classList.add('file-item');
+
+			const icon = document.createElement('i');
+			if (item.type === 'folder') {
+				icon.classList.add('fas', 'fa-folder', 'folder');
+				container.classList.add('folder');
+			} else {
+				icon.classList.add('fas', 'fa-file');
+			}
+
+			const name = document.createElement('span');
+			name.textContent = item.name;
+
+			container.appendChild(icon);
+			container.appendChild(name);
+
+			container.addEventListener('click', (e)=>{
+				window.location.href="?path="+(PATH!="NONE"?PATH+"/"+item.name:item.name);
+			});
+
+			return container;
+		}
+		function traverseAndAct(path, structure) {
+			if (path === "NONE" || !path) return structure;
+
+			const keys = path.split('/');
+			let currentLevel = structure;
+
+			for (const key of keys) {
+				if (!Array.isArray(currentLevel)) {
+					console.error(`Invalid path: "${key}" not found in current level`);
+					return [];
+				}
+
+				const next = currentLevel.find(child => child.name === key);
+				if (!next || !next.children) {
+					console.error(`Invalid path: "${key}" not found or has no children`);
+					return [];
+				}
+				currentLevel = next.children;
+			}
+
+			return currentLevel;
+		}
+		function renderFileStructure(structure) {
+			if(PATH.includes('.')) return;
+			const container = document.getElementById('file-structure');
+
+			const toRender =
+				PATH === "NONE" ? structure : traverseAndAct(PATH, structure);
+
+			toRender.forEach(item => {
+				container.appendChild(createFileItem(item));
+			});
+		}
+
+		// Fetch the structure from the JSON file
+		fetch('output.json')
+			.then(response => response.json())
+			.then(data => {
+				fileStructure.data = data;
+				renderFileStructure(data);
+			})
+			.catch(error => {
+				console.error("Error loading file structure:", error);
+			});
+			
+		
+	</script>
+
+</body>
+</html>

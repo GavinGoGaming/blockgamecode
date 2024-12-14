@@ -1,0 +1,65 @@
+== SUMMARY OF DECOMPILATION
+== FOR ZUMBIEPIG
+== Below are the classes that failed to decompile, shouldn't mess much up tho
+
+net.minecraft.entity.LivingEntity
+----------------------------
+
+tickMovement()
+  Unable to fully structure code
+
+
+net.minecraft.util.NetworkUtils
+----------------------------
+
+download(java.nio.file.Path java.net.URL java.util.Map<java.lang.String, java.lang.String> com.google.common.hash.HashFunction com.google.common.hash.HashCode int java.net.Proxy net.minecraft.util.NetworkUtils$DownloadListener )
+  Loose catch block
+
+
+net.minecraft.world.gen.feature.GeodeFeature
+----------------------------
+
+generate(net.minecraft.world.gen.feature.util.FeatureContext<net.minecraft.world.gen.feature.GeodeFeatureConfig> )
+  Could not resolve type clashes
+
+
+net.minecraft.server.command.ExecuteCommand
+----------------------------
+
+enqueueExecutions(T java.util.List<T> java.util.function.Function<T, T> java.util.function.IntPredicate com.mojang.brigadier.context.ContextChain<T> net.minecraft.nbt.NbtCompound net.minecraft.command.ExecutionControl<T> net.minecraft.server.command.ExecuteCommand$FunctionNamesGetter<T, java.util.Collection<net.minecraft.server.function.CommandFunction<T>>> net.minecraft.command.ExecutionFlags )
+  Exception : org.benf.cfr.reader.util.ConfusedCFRException: Started 2 blocks at once
+
+
+net.minecraft.server.network.ChunkDataSender
+----------------------------
+
+makeBatch(net.minecraft.server.world.ServerChunkLoadingManager net.minecraft.util.math.ChunkPos )
+  Unable to fully structure code
+
+
+net.minecraft.entity.passive.RabbitEntity
+----------------------------
+
+createChild(net.minecraft.server.world.ServerWorld net.minecraft.entity.passive.PassiveEntity )
+  Unable to fully structure code
+
+
+net.minecraft.nbt.NbtList
+----------------------------
+
+scanList(java.io.DataInput net.minecraft.nbt.scanner.NbtScanner net.minecraft.nbt.NbtSizeTracker )
+  Exception : org.benf.cfr.reader.util.ConfusedCFRException: Tried to end blocks [4[SWITCH], 8[CASE]], but top level block is 9[SWITCH]
+
+
+net.minecraft.predicate.entity.EntityFlagsPredicate
+----------------------------
+
+test(net.minecraft.entity.Entity )
+  Unable to fully structure code
+
+
+net.minecraft.world.gen.feature.TreeFeature
+----------------------------
+
+placeLogsAndLeaves(net.minecraft.world.WorldAccess net.minecraft.util.math.BlockBox java.util.Set<net.minecraft.util.math.BlockPos> java.util.Set<net.minecraft.util.math.BlockPos> java.util.Set<net.minecraft.util.math.BlockPos> )
+  Unable to fully structure code
